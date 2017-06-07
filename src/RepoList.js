@@ -1,7 +1,7 @@
 import React from 'react';
 import { array } from 'prop-types';
 
-const UserRepoList = (props) => {
+const RepoList = (props) => {
     const tableRows = props.repos.map((repo) => {
         return (
             <tr key={repo.id}>
@@ -27,7 +27,7 @@ const UserRepoList = (props) => {
 }
 
 
-UserRepoList.propTypes = {
+RepoList.propTypes = {
     repos: array
 }
-export default UserRepoList;
+export default RepoList;

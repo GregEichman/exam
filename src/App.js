@@ -2,42 +2,63 @@ import React, { Component } from 'react';
 import UserForm from './UserForm';
 import UserRepoList from './UserRepoList';
 import LanguageList from './LanguageList';
-
+import axios from 'axios';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 class App extends Component {
+    state = {
+        users: [],
+        repos: []
+    }
+    handleSearchFormSubmit = (searchTerm) => {
+        this.setState({
+            repos: []
+        })
+        return axios.get(`https://api.github.com/search/users?q=${searchTerm}`)
+            .then(({ data }) => {
+                const { items: users } = data;
+                if (users < 1) {
+                    this.setState({
+                        users: []
+                    })
+                    throw new Error('No results');
+                }
+                this.setState({
+                    users: users
+                });
+            });
+    }
+
+    handleUserClick = (username) => {
+        axios.get(`https://api.github.com/users/${username}/repos`)
+            .then((response) => {
+                this.setState({
+                    repos: response.data
+                })
+            })
+    }
     render() {
         return (
-        	<div>
-	            <h1>Github viewer</h1>
-	            <h3> search repository by username </h3>
-	            <input type="text" placeholder="username" />
-	            <br></br>
-	            <button>Search</button>
-	            <h2> person's-name-here repository </h2>
-	            <form>
-					<select name="language">
-					    <option value="PLI">PLI</option>
-					    <option value="JavaScript">JavaScript</option>
-					    <option value="react">react</option>
-					    <option value="html">html</option>
-				  	</select>
-				  	
-				</form>
-				<h2> language-filtered-repo-name-here repository </h2>
-				<table className="table" >
-					<tr>
-					    <th>Stats</th>
-					    <th>Forks</th>
-					    <th>Language</th>
-				 	</tr>
-                    <tr> 
-                        <td>stats-data-here</td>
-                        <td>forks-data-here</td>
-                        <td>flanguage-data-here</td>
-                    </tr>
-                </table>
-            </div>
+            <Router>
+                <div className="App container">
+                    <h1>Github Viewer</h1>
+                    <h3> search repository by username </h3>
+                    <Route path="/" render={(props) => {
+                        return <UserForm {...props} onSubmit={this.handleSearchFormSubmit} />
+                    }}
+
+                    />
+                    <UserRepoList users={this.state.users} onClick={this.handleUserClick} />
+                    <Route path="/:user/repos" render={(props) => {
+                        if (this.state.users.length < 1) {
+                            return <Redirect to="/" />
+                        }
+                        return <UserRepoList repos={this.state.repos} />
+                    }} />
+                </div>
+            </Router>
         )
     }
 }
-//I'm unable to debug why my component files will not render so I've done the static version in app
 export default App;
+
+// Please see error.doc for a screen shot. I used the example you showed us as a starting point. I can’t seem to get past this error even if I attempt to use a very basic component file. Therefore, I was unable to make any additional progress from this point. I attempted to look this up on the internet and found no solution.
