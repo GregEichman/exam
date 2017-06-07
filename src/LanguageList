@@ -1,0 +1,22 @@
+import React from 'react';
+
+const LanguageList = () => {
+    return (
+        <div className="row">
+            <h2> language-filtered-repo-name-here repository </h2>
+                <table className="table" >
+                    <tr>
+                        <th>Stats</th>
+                        <th>Forks</th>
+                        <th>Language</th>
+                    </tr>
+                    <tr> 
+                        <td>stats-data-here</td>
+                        <td>forks-data-here</td>
+                        <td>flanguage-data-here</td>
+                    </tr>
+                </table>
+        </div>
+    )
+}
+export default LanguageList;

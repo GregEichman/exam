@@ -1,0 +1,14 @@
+import React from 'react';
+
+const UserForm = () => {
+    return (
+        <div >
+            <h1>Github viewer</h1>
+	            <h3> search repository by username </h3>
+	            <input type="text" placeholder="username" />
+	            <br></br>
+	            <button>Search</button>
+        </div>
+    );
+}
+export default UserForm;
